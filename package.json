@@ -1,0 +1,19 @@
+{
+    "name": "green-wheels-frontend",
+    "version": "1.0.0",
+    "description": "Green Wheels Frontend",
+    "dependencies": {
+        "green-wheels-core": "1.0.0"
+    },
+    "devDependencies": {
+        "http-server": "14.1.1"
+    },
+    "main": "src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "echo building",
+        "serve": "http-server"
+    },
+    "author": "Alessandro Alfano",
+    "license": "MIT"
+}

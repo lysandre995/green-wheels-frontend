@@ -20,38 +20,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         return response.json();
     }).catch(_ => {
-            window.location.href = "../login";
-      });
-
-    // Load enum data from the server or from an exposed configuration file
-    async function loadEnums() {
-        const response = await fetch('/enums'); // Endpoint that serves enum data
-        if (response.ok) {
-            const enums = await response.json();
-            populateSelectOptions('car-type', enums.carTypes);
-            populateSelectOptions('fuel-type', enums.fuelTypes);
-            populateSelectOptions('transmission-type', enums.transmissionTypes);
-            populateSelectOptions('travel-time', enums.travelTimes);
-            populateSelectOptions('music-preference', enums.musicPreferences);
-        }
-    }
-
-    function populateSelectOptions(selectId, options) {
-        const select = document.getElementById(selectId);
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option.value;
-            opt.textContent = option.label;
-            select.appendChild(opt);
-        });
-    }
+        window.location.href = "../login";
+    });
 
     async function getProfile(userId) {
         const response = await fetch(`http://localhost:3000/profile/${userId}`, {
             headers: {"Authorization": `Bearer ${authToken}`}
         });
         if (response.ok) {
-            const profile = await response.json();
+            let profile;
+            try {
+                profile = await response.json();
+            } catch {
+                console.error("No profile found");
+            }
             return profile;
         }
         return null;
@@ -66,6 +48,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             body: JSON.stringify({ profile })
         });
+
+        window.location.replace('login/index.html');
     }
 
     async function updateProfile(profile) {
@@ -77,6 +61,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
             body: JSON.stringify({ profile })
         });
+
+        window.location.replace('login/index.html');
     }
 
     async function deleteProfile(userId) {
@@ -84,6 +70,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             method: 'DELETE',
             headers: {"Authorization": `Bearer ${authToken}`}
         });
+
+        window.location.replace('login/index.html');
     }
 
     const profile = await getProfile(userId);
@@ -95,6 +83,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         profileInfo.textContent = 'Profile exists. You can update it below:';
         profileForm.classList.remove('d-none');
+
+        document.getElementById('car-type').value = profile.car.type || '';
+        document.getElementById('fuel-type').value = profile.car.fuel || '';
+        document.getElementById('transmission-type').value = profile.car.transmission || '';
+        document.getElementById('luxury').value = profile.car.luxury || '';
+        document.getElementById('low-emission').value = profile.car.lowEmission || '';
+        document.getElementById('accessibility').value = profile.car.disabilityAccessVehicle || '';
+        document.getElementById('available-seats').value = profile.availableSeats || '';
+        
+        document.getElementById('smoke-on-board').value = profile.preferences.smokeOnBoard || '';
+        document.getElementById('conversation').value = profile.preferences.conversation || '';
+        document.getElementById('music').value = profile.preferences.music || '';
+        document.getElementById('music-preference').value = profile.preferences.musicPreference || '';
+        document.getElementById('pets').value = profile.preferences.pets || '';
+        document.getElementById('temperature').value = profile.preferences.temperature || '';
+        document.getElementById('breaks').value = profile.preferences.breaks || '';
+        document.getElementById('speed').value = profile.preferences.speed || '';
+        document.getElementById('luggage').value = profile.preferences.luggage || '';
+        
+        document.getElementById('travel-time').value = profile.travelTime || '';
     }
 
     createProfileBtn.addEventListener('click', () => {
@@ -105,6 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const profile = {
+            id: Number(userId),
             car: {
                 type: document.getElementById('car-type').value,
                 fuel: document.getElementById('fuel-type').value,
@@ -143,7 +152,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         profileForm.classList.add('d-none');
         createProfileBtn.classList.remove('d-none');
     });
-
-    // Load enums to populate the form
-    await loadEnums();
 });

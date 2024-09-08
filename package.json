@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "Green Wheels Frontend",
     "dependencies": {
-        "green-wheels-core": "1.0.0"
+        "green-wheels-core": "1.0.0",
+        "nodemon": "^3.1.4"
     },
     "devDependencies": {
         "http-server": "14.1.1"
@@ -12,7 +13,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "echo building",
-        "serve": "http-server"
+        "serve": "nodemon --exec \"http-server\" ."
     },
     "author": "Alessandro Alfano",
     "license": "MIT"

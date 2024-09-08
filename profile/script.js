@@ -47,7 +47,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function getProfile(userId) {
-        const response = await fetch(`/profile/${userId}`);
+        const response = await fetch(`http://localhost:3000/profile/${userId}`, {
+            headers: {"Authorization": `Bearer ${authToken}`}
+        });
         if (response.ok) {
             const profile = await response.json();
             return profile;
@@ -56,9 +58,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function createProfile(profile) {
-        await fetch('/profile', {
+        await fetch('http://localhost:3000/profile', {
             method: 'POST',
             headers: {
+                "Authorization": `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ profile })
@@ -66,9 +69,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function updateProfile(profile) {
-        await fetch('/profile', {
+        await fetch('http://localhost:3000/profile', {
             method: 'PUT',
             headers: {
+                "Authorization": `Bearer ${authToken}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ profile })
@@ -76,12 +80,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function deleteProfile(userId) {
-        await fetch(`/profile/${userId}`, {
-            method: 'DELETE'
+        await fetch(`http://localhost:3000/profile/${userId}`, {
+            method: 'DELETE',
+            headers: {"Authorization": `Bearer ${authToken}`}
         });
     }
 
     const profile = await getProfile(userId);
+    const isEditing = !!profile;
 
     if (!profile) {
         profileInfo.textContent = 'Profile not found. Create one:';
@@ -103,19 +109,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 type: document.getElementById('car-type').value,
                 fuel: document.getElementById('fuel-type').value,
                 transmission: document.getElementById('transmission-type').value,
-                luxury: false,
-                lowEmission: false,
-                disabilityAccessVehicle: false
+                luxury: document.getElementById('luxury').value,
+                lowEmission: document.getElementById('low-emission').value,
+                disabilityAccessVehicle: document.getElementById('accessibility')
             },
             availableSeats: document.getElementById('available-seats').value,
-            prefrences: {
+            preferences: {
+                smokeOnBoard: document.getElementById('smoke-on-board').value,
+                conversation: document.getElementById('conversation').value,
+                music: document.getElementById('music').value,
                 musicPreference: document.getElementById('music-preference').value,
-                // Add other preferences here
+                pets: document.getElementById('pets').value,
+                temperature: document.getElementById('temperature').value,
+                breaks: document.getElementById('breaks').value,
+                speed: document.getElementById('speed').value,
+                luggage: document.getElementById('luggage').value
             },
             travelTime: document.getElementById('travel-time').value
         };
 
-        if (createProfileBtn.classList.contains('d-none')) {
+        if (isEditing) {
             await updateProfile(profile);
         } else {
             await createProfile(profile);

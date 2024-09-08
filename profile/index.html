@@ -69,21 +69,6 @@
                 <input type="number" class="form-control" id="available-seats" required min="1" max="8">
             </div>
 
-            <!-- Travel Time -->
-            <div class="mb-3">
-                <label for="travel-time" class="form-label">Preferred Travel Time</label>
-                <select class="form-select" id="travel-time" required>
-                    <option value="">Select travel time</option>
-                    <option value="EarlyMorning">Early Morning (5 AM - 8 AM)</option>
-                    <option value="Morning">Morning (8 AM - 12 PM)</option>
-                    <option value="Afternoon">Afternoon (12 PM - 5 PM)</option>
-                    <option value="Evening">Evening (5 PM - 9 PM)</option>
-                    <option value="Night">Night (9 PM - 12 AM)</option>
-                    <option value="LateNight">Late Night (12 AM - 5 AM)</option>
-                    <option value="Flexible">Flexible (Any Time)</option>
-                </select>
-            </div>
-
             <!-- Preferences (example for Music and Smoking) -->
             <div class="mb-3">
                 <label for="smoke-on-board" class="form-check-label">Smoke On Board</label>
@@ -142,9 +127,24 @@
                 <label for="luggage" class="form-label">Breaks Frequence</label>
                 <select class="form-select" id="luggage" required>
                     <option value="">Select break frequence</option>
-                    <option value="Relax">Relax</option>
-                    <option value="Normal">Normal</option>
-                    <option value="Hurry">Hurry</option>
+                    <option value="None">None</option>
+                    <option value="LittleBag">Little Bag</option>
+                    <option value="BigBag">Big Bag</option>
+                </select>
+            </div>
+
+            <!-- Travel Time -->
+            <div class="mb-3">
+                <label for="travel-time" class="form-label">Preferred Travel Time</label>
+                <select class="form-select" id="travel-time" required>
+                    <option value="">Select travel time</option>
+                    <option value="EarlyMorning">Early Morning (5 AM - 8 AM)</option>
+                    <option value="Morning">Morning (8 AM - 12 PM)</option>
+                    <option value="Afternoon">Afternoon (12 PM - 5 PM)</option>
+                    <option value="Evening">Evening (5 PM - 9 PM)</option>
+                    <option value="Night">Night (9 PM - 12 AM)</option>
+                    <option value="LateNight">Late Night (12 AM - 5 AM)</option>
+                    <option value="Flexible">Flexible (Any Time)</option>
                 </select>
             </div>
 

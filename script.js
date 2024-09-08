@@ -8,16 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch("http://localhost:3000/validate", {
         method: "POST",
-        body: JSON.stringify({ token })
+        body: JSON.stringify({ token: authToken })
     }).then(response => {
         if (!response.ok) {
             throw new Error("Invalid token");
         }
         return response.json();
     }).then(data => {
-            if (!data.valid) {
-                window.location.href = "/login";
-            }
+            localStorage.userId = data.id
       }).catch(_ => {
             window.location.href = "/login";
       });

@@ -1,33 +1,34 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login');
+(async () => {
+    const loginForm = document.getElementById("login");
 
     if (loginForm) {
-        loginForm.addEventListener('submit', (event) => {
+        loginForm.addEventListener("submit", async event => {
             event.preventDefault();
             const formData = new FormData(loginForm);
             const data = {
-                username: formData.get('username'),
-                password: formData.get('password')
+                username: formData.get("username"),
+                password: formData.get("password")
             };
 
-            fetch('http://localhost:3000/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
+            try {
+                const response = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+                const responseJson = await response.json();
+                if (responseJson.token) {
                     // Save token in localStorage
-                    localStorage.setItem('authToken', data.token);
-                    window.location.href = '../';
+                    localStorage.setItem("authToken", responseJson.token);
+                    window.location.hash = "#home";
                 } else {
-                    alert('Login failed: ' + data.message);
+                    alert("Login failed: " + responseJson.message);
                 }
-            })
-            .catch(error => console.error('Error logging in:', error));
+            } catch (e) {
+                console.error("Error logging in:", error);
+            }
         });
     }
-});
+})();

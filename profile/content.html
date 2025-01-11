@@ -1,0 +1,145 @@
+<div class="container">
+    <h1>User Profile</h1>
+    <div id="profile-section">
+        <p id="profile-info" class="lead">Checking if profile exists...</p>
+        <button id="create-profile-btn" class="btn btn-primary d-none">Create Profile</button>
+    </div>
+
+    <form id="profile-form" class="d-none">
+        <h3>Edit Profile</h3>
+
+        <!-- Car Info -->
+        <div class="mb-3">
+            <label for="car-type" class="form-label">Car Type</label>
+            <select class="form-select" id="car-type" required>
+                <option value="">Select car type</option>
+                <option value="CityCar">City Car</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Minivan">Minivan</option>
+                <option value="Crossover">Crossover</option>
+                <option value="StationWagon">Station Wagon</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="fuel-type" class="form-label">Fuel Type</label>
+            <select class="form-select" id="fuel-type" required>
+                <option value="">Select fuel type</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Gasoline">Gasoline</option>
+                <option value="LPG">LPG</option>
+                <option value="CNG">CNG</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="transmission-type" class="form-label">Transmission Type</label>
+            <select class="form-select" id="transmission-type" required>
+                <option value="">Select transmission type</option>
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="luxury" class="form-check-label">Luxury</label>
+            <input type="checkbox" class="form-check" id="luxury" />
+        </div>
+        <div class="mb-3">
+            <label for="low-emission" class="form-check-label">Low Emission</label>
+            <input type="checkbox" class="form-check" id="low-emission" />
+        </div>
+        <div class="mb-3">
+            <label for="accessibility" class="form-check-label">Disability Access Vehicle</label>
+            <input type="checkbox" class="form-check" id="accessibility" />
+        </div>
+
+        <!-- Available Seats -->
+        <div class="mb-3">
+            <label for="available-seats" class="form-label">Available Seats</label>
+            <input type="number" class="form-control" id="available-seats" required min="1" max="8" />
+        </div>
+
+        <!-- Preferences (example for Music and Smoking) -->
+        <div class="mb-3">
+            <label for="smoke-on-board" class="form-check-label">Smoke On Board</label>
+            <input type="checkbox" class="form-check" id="smoke-on-board" />
+        </div>
+        <div class="mb-3">
+            <label for="conversation" class="form-check-label">Conversation</label>
+            <input type="checkbox" class="form-check" id="conversation" />
+        </div>
+        <div class="mb-3">
+            <label for="music" class="form-check-label">Music</label>
+            <input type="checkbox" class="form-check" id="music" />
+        </div>
+        <div class="mb-3">
+            <label for="music-preference" class="form-label">Music Preference</label>
+            <select class="form-select" id="music-preference" required>
+                <option value="">Select music preference</option>
+                <option value="RelaxingMusic">Relaxing Music</option>
+                <option value="EnergeticMusic">Energetic Music</option>
+                <option value="Radio">Radio</option>
+                <option value="Podcast">Podcast</option>
+                <option value="Audiobook">Audiobook</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="pets" class="form-check-label">Pets</label>
+            <input type="checkbox" class="form-check" id="pets" />
+        </div>
+        <div class="mb-3">
+            <label for="temperature" class="form-label">Temperature Preference</label>
+            <select class="form-select" id="temperature" required>
+                <option value="">Select temperature preference</option>
+                <option value="AirConditioning">Air Conditioning</option>
+                <option value="WindowsOpen">Windows Open</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="breaks" class="form-label">Breaks Frequence</label>
+            <select class="form-select" id="breaks" required>
+                <option value="">Select break frequence</option>
+                <option value="None">None</option>
+                <option value="Low">Low</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="speed" class="form-label">Speed</label>
+            <select class="form-select" id="speed" required>
+                <option value="">Select speed</option>
+                <option value="Relax">Relax</option>
+                <option value="Normal">Normal</option>
+                <option value="Hurry">Hurry</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="luggage" class="form-label">Luggage</label>
+            <select class="form-select" id="luggage" required>
+                <option value="">Select luggage</option>
+                <option value="None">None</option>
+                <option value="LittleBag">Little Bag</option>
+                <option value="BigBag">Big Bag</option>
+            </select>
+        </div>
+
+        <!-- Travel Time -->
+        <div class="mb-3">
+            <label for="travel-time" class="form-label">Preferred Travel Time</label>
+            <select class="form-select" id="travel-time" required>
+                <option value="">Select travel time</option>
+                <option value="EarlyMorning">Early Morning (5 AM - 8 AM)</option>
+                <option value="Morning">Morning (8 AM - 12 PM)</option>
+                <option value="Afternoon">Afternoon (12 PM - 5 PM)</option>
+                <option value="Evening">Evening (5 PM - 9 PM)</option>
+                <option value="Night">Night (9 PM - 12 AM)</option>
+                <option value="LateNight">Late Night (12 AM - 5 AM)</option>
+                <option value="Flexible">Flexible (Any Time)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Profile</button>
+        <button id="delete-profile-btn" type="button" class="btn btn-danger">Delete Profile</button>
+    </form>
+</div>

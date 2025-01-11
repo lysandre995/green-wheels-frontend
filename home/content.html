@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col">
+        <h4>Passaggi Offerti</h4>
+        <div id="offered-rides" class="ride-container">
+            <!-- Here will be placed the offered rides -->
+        </div>
+    </div>
+
+    <div class="col">
+        <h4>Passaggi Disponibili</h4>
+        <div id="available-rides" class="ride-container">
+            <!-- Here will be placed the available rides -->
+        </div>
+    </div>
+
+    <div class="col">
+        <h4>Prenotazioni</h4>
+        <div id="reservations" class="ride-container">
+            <!-- Here will be placed the available rides -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funzioni minime per il comportamento
+    function deleteRide(button) {
+        button.closest("div").remove();
+        toggleMessage("offered-rides", "no-offered-rides");
+    }
+
+    function bookRide(button) {
+        button.innerHTML = '<i class="ph-x"></i>';
+        button.classList.remove("btn-outline-primary");
+        button.classList.add("btn-outline-danger");
+        button.setAttribute("onclick", "cancelBooking(this)");
+    }
+
+    function cancelBooking(button) {
+        button.innerHTML = '<i class="ph-check"></i>';
+        button.classList.remove("btn-outline-danger");
+        button.classList.add("btn-outline-primary");
+        button.setAttribute("onclick", "bookRide(this)");
+    }
+
+    function acceptReservation(button) {
+        button.closest("div").remove();
+        toggleMessage("reservations", "no-reservations");
+    }
+
+    function rejectReservation(button) {
+        button.closest("div").remove();
+        toggleMessage("reservations", "no-reservations");
+    }
+
+    function toggleMessage(containerId, messageId) {
+        const container = document.getElementById(containerId);
+        const message = document.getElementById(messageId);
+        message.style.display = container.children.length === 0 ? "block" : "none";
+    }
+</script>

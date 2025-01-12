@@ -23,6 +23,7 @@
                     // Save token in localStorage
                     localStorage.setItem("authToken", responseJson.token);
                     window.location.hash = "#home";
+                    location.reload();
                 } else {
                     alert("Login failed: " + responseJson.message);
                 }

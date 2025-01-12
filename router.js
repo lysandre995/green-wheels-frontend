@@ -59,3 +59,17 @@ window.addEventListener("hashchange", () => {
 
 const initialRoute = window.location.hash.slice(1) || "home";
 loadRoute(initialRoute);
+
+(async () => {
+    const authToken = localStorage.getItem("authToken");
+    const userNameResponse = await fetch("http://localhost:3000/user-name", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` }
+    });
+    if (userNameResponse.ok) {
+        const userName = (await userNameResponse.json()).userName;
+        document.getElementById("current-user").innerHTML = `<strong>Welcome, ${userName}</strong>`;
+        return;
+    }
+    document.getElementById("current-user").innerHTML = "";
+})();

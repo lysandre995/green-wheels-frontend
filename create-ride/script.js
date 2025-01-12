@@ -1,7 +1,7 @@
 (async () => {
     // auth validation
     const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
+    if (authToken === undefined || authToken === null) {
         window.location.hash = "#login";
     }
 

@@ -5,6 +5,17 @@
         window.location.hash = "#login";
     }
 
+    const getUserId = async () => {
+        const userNameResponse = await fetch("http://localhost:3000/user-name", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${authToken}` }
+        });
+        if (userNameResponse.ok) {
+            const userName = (await userNameResponse.json()).userName;
+            return userName;
+        }
+    };
+
     const manageResponse = async (response, responseType) => {
         let result;
         try {
@@ -28,7 +39,6 @@
     };
 
     const renderMessages = () => {
-        const messageFeed = document.getElementById("message-feed");
         messageFeed.innerHTML = "";
         const messages = conversations[currentContactId] || [];
         messages.forEach(message => {
@@ -57,7 +67,8 @@
         window.location.hash = "#login";
     }
 
-    const currentContactId = null;
+    const userId = await getUserId();
+    let currentContactId = null;
     const chats = await getMessages();
 
     const contactList = document.getElementById("contact-list");
@@ -92,8 +103,10 @@
         const li = document.createElement("li");
         li.className = "list-group-item d-flex justify-content-between align-items-center";
         li.innerHTML = `<span>${contact.name}</span><small class="text-muted">${contact.lastMessage}</small>`;
+        li.style.cursor = "pointer";
         li.addEventListener("click", () => {
             currentContactId = contact.id;
+            document.getElementById("username-input").value = contact.userName;
             renderMessages();
         });
         contactList.appendChild(li);
@@ -101,16 +114,16 @@
 
     if (contacts.length > 0) {
         currentContactId = contacts[0].id;
+        document.getElementById("username-input").value = contacts[0].userName;
         renderMessages();
     }
 
     // message send
-    document.getElementById("chat-form").addEventListener("submit", e => {
+    chatForm.addEventListener("submit", e => {
         e.preventDefault();
-        const input = document.getElementById("message-input");
-        const messageText = input.value.trim();
+        const messageText = messageInput.value.trim();
         if (!messageText) return;
-        input.value = "";
+        messageInput.value = "";
 
         const newMessage = {
             text: messageText,

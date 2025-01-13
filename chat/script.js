@@ -5,7 +5,7 @@
         window.location.hash = "#login";
     }
 
-    const getUserId = async () => {
+    const getUserName = async () => {
         const userNameResponse = await fetch("http://localhost:3000/user-name", {
             method: "GET",
             headers: { Authorization: `Bearer ${authToken}` }
@@ -13,6 +13,17 @@
         if (userNameResponse.ok) {
             const userName = (await userNameResponse.json()).userName;
             return userName;
+        }
+    };
+
+    const getUserIdFromUsername = async username => {
+        const userIdResponse = await fetch(`http://localhost:3000/user-id/${username}`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${authToken}` }
+        });
+        if (userIdResponse.ok) {
+            const userId = (await userIdResponse.json()).userId;
+            return userId;
         }
     };
 
@@ -54,6 +65,17 @@
         });
     };
 
+    const sendMessage = async message => {
+        const sendMessageResponse = await fetch("http://localhost:3000/chat", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${authToken}` },
+            body: JSON.stringify({ message })
+        });
+        if (sendMessageResponse.ok) {
+            await manageResponse(sendMessageResponse, "send messages");
+        }
+    };
+
     try {
         const validateResponse = await fetch("http://localhost:3000/validate", {
             method: "POST",
@@ -67,7 +89,7 @@
         window.location.hash = "#login";
     }
 
-    const userId = await getUserId();
+    const userId = await getUserIdFromUsername("");
     let currentContactId = null;
     const chats = await getMessages();
 
@@ -106,7 +128,7 @@
         li.style.cursor = "pointer";
         li.addEventListener("click", () => {
             currentContactId = contact.id;
-            document.getElementById("username-input").value = contact.userName;
+            document.getElementById("username-input").value = contact.name;
             renderMessages();
         });
         contactList.appendChild(li);
@@ -114,23 +136,35 @@
 
     if (contacts.length > 0) {
         currentContactId = contacts[0].id;
-        document.getElementById("username-input").value = contacts[0].userName;
+        document.getElementById("username-input").value = contacts[0].name;
         renderMessages();
     }
 
     // message send
-    chatForm.addEventListener("submit", e => {
+    chatForm.addEventListener("submit", async e => {
         e.preventDefault();
         const messageText = messageInput.value.trim();
         if (!messageText) return;
         messageInput.value = "";
 
+        let toId = contacts[currentContactId].id;
+        const usernameInput = document.getElementById("username-input").value;
+        if (usernameInput !== undefined && usernameInput !== null && usernameInput !== "") {
+            toId = await getUserIdFromUsername(usernameInput);
+        }
+
+        if (toId === undefined || toId === null) {
+            alert("Error: specified username doesn't exist");
+            return;
+        }
+
         const newMessage = {
-            text: messageText,
-            timestamp: new Date().toISOString(),
-            type: "sent"
+            to: toId,
+            message: messageText,
+            dateTime: new Date().toISOString()
         };
-        conversations[currentContactId].push(newMessage);
-        renderMessages();
+        await sendMessage(newMessage);
+        location.reload();
+        // renderMessages();
     });
 })();

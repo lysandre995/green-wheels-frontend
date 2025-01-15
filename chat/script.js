@@ -140,6 +140,15 @@
         renderMessages();
     }
 
+    const ratingForms = document.querySelectorAll(".ratingForm");
+    ratingForms.forEach(rf => {
+        rf.addEventListener("submit", async () => {
+            const token = rf.getAttribute("token").valueOf();
+            const rating = Number(rf.getElementByClass("rating").value);
+            console.log(rating);
+        });
+    });
+
     // message send
     chatForm.addEventListener("submit", async e => {
         e.preventDefault();
@@ -165,6 +174,5 @@
         };
         await sendMessage(newMessage);
         location.reload();
-        // renderMessages();
     });
 })();

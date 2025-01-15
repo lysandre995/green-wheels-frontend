@@ -57,6 +57,28 @@
         }
     };
 
+    const startRide = async rideId => {
+        const startResponse = await fetch(`http://localhost:3000/ride-start`, {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${authToken}` },
+            body: JSON.stringify({ rideId })
+        });
+        if (startResponse.ok) {
+            return manageResponse(startResponse, `start ride with id: ${rideId}`);
+        }
+    };
+
+    const finishRide = async rideId => {
+        const finishResponse = await fetch(`http://localhost:3000/ride-end`, {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${authToken}` },
+            body: JSON.stringify({ rideId })
+        });
+        if (finishResponse.ok) {
+            return manageResponse(finishResponse, `finish ride with id: ${rideId}`);
+        }
+    };
+
     const bookRide = async rideId => {
         const bookResponse = await fetch("http://localhost:3000/reservation", {
             method: "POST",
@@ -120,6 +142,30 @@
 
         for (const or of offeredRides) {
             const date = new Date(or.dateTime);
+            const deleteButton = `
+                <button class="btn btn-sm btn-outline-danger" aria-label="Elimina corsa" data-id="${or.id}">
+                    <i class="ph ph-trash" aria-hidden="true"></i> Elimina
+                </button>`;
+            const startButton = `
+                <button class="btn btn-sm btn-outline-primary" aria-label="Inizia corsa" data-id="${or.id}">
+                    <i class="ph ph-play" aria-hidden="true"></i> Start
+                </button>
+            `;
+            const finishButton = `
+                <button class="btn btn-sm btn-outline-danger" aria-label="Termina corsa" data-id="${or.id}">
+                    <i class="ph ph-stop" aria-hidden="true"></i> Finish
+                </button>
+            `;
+            let buttons = "";
+            if (or.state === "Ready") {
+                buttons = deleteButton + startButton;
+            }
+            if (or.state === "Started") {
+                buttons = finishButton;
+            }
+            if (or.state === "Finished") {
+                buttons = "";
+            }
             offeredRidesHtml += `
                 <div class="ride-item">
                     <div><strong>Da:</strong> ${or.start.municipality}</div>
@@ -133,9 +179,7 @@
                         ${date.getHours().toString().padStart(2, "0")}:
                         ${date.getMinutes().toString().padStart(2, "0")}
                     </div>
-                    <button class="btn btn-sm btn-outline-danger" aria-label="Elimina corsa" data-id="${or.id}">
-                        <i class="ph ph-trash" aria-hidden="true"></i> Elimina
-                    </button>
+                    ${buttons}
                 </div>`;
         }
         document.getElementById("offered-rides").innerHTML = offeredRidesHtml;
@@ -149,6 +193,22 @@
                 location.reload();
             });
         });
+        const startButtons = document.querySelectorAll('button[aria-label="Inizia corsa"]');
+        startButtons.forEach(button => {
+            button.addEventListener("click", async event => {
+                const rideId = event.target.closest("button").getAttribute("data-id");
+                await startRide(rideId);
+                location.reload();
+            });
+        });
+        const finishButtons = document.querySelectorAll('button[aria-label="Termina corsa"]');
+        finishButtons.forEach(button => {
+            button.addEventListener("click", async event => {
+                const rideId = event.target.closest("button").getAttribute("data-id");
+                await finishRide(rideId);
+                location.reload();
+            });
+        });
 
         // get available rides
         const avalableRides = await getAvailableRides();
@@ -158,7 +218,7 @@
         for (const ar of avalableRides) {
             const date = new Date(ar.dateTime);
             const isReserved = (await getRideIsReserved(ar.id)).isReserved;
-            const reservationButton =
+            let reservationButton =
                 !isReserved ?
                     `<button class="btn btn-sm btn-outline-primary" aria-label="Prenota corsa" data-id="${ar.id}">
                     <i class="ph ph-calendar-plus"></i> Prenota
@@ -166,6 +226,9 @@
                 :   `<button class="btn btn-sm btn-outline-secondary" aria-label="Prenota corsa" disabled data-id="${ar.id}">
                     <i class="ph ph-calendar-check"></i> Prenotato
                 </button>`;
+            if (ar.state !== "Ready") {
+                reservationButton = "";
+            }
             avalableRidesHtml += `
                 <div class="ride-item">
                     <div><strong>Da:</strong> ${ar.start.municipality}</div>

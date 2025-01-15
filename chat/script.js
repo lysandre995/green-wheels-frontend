@@ -108,6 +108,14 @@
                 })
         ).values()
     ];
+    contacts.sort((a, b) => {
+        const parseDate = dateString => {
+            const [datePart, timePart] = dateString.split(", ");
+            const [day, month, year] = datePart.split("/").map(Number);
+            return new Date(2000 + year, month - 1, day, ...timePart.split(":").map(Number));
+        };
+        return parseDate(b.lastMessage) - parseDate(a.lastMessage);
+    });
 
     const conversations = {};
     chats.forEach(msg => {
@@ -156,7 +164,7 @@
         if (!messageText) return;
         messageInput.value = "";
 
-        let toId = contacts[currentContactId].id;
+        let toId = contacts.find(c => c.id === currentContactId).id;
         const usernameInput = document.getElementById("username-input").value;
         if (usernameInput !== undefined && usernameInput !== null && usernameInput !== "") {
             toId = await getUserIdFromUsername(usernameInput);

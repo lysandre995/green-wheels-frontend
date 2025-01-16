@@ -1,4 +1,5 @@
 (async () => {
+    const baseUrl = localStorage.getItem("baseUrl");
     const loginForm = document.getElementById("login");
 
     if (loginForm) {
@@ -11,7 +12,7 @@
             };
 
             try {
-                const response = await fetch("http://localhost:3000/login", {
+                const response = await fetch(`${baseUrl}/login`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

@@ -1,3 +1,6 @@
+const baseUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
+localStorage.setItem("baseUrl", baseUrl);
+
 const routes = {
     home: {
         html: "home/content.html",
@@ -62,7 +65,7 @@ loadRoute(initialRoute);
 
 (async () => {
     const authToken = localStorage.getItem("authToken");
-    const userNameResponse = await fetch("http://localhost:3000/user-name", {
+    const userNameResponse = await fetch(`${baseUrl}/user-name`, {
         method: "GET",
         headers: { Authorization: `Bearer ${authToken}` }
     });

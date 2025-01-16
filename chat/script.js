@@ -1,23 +1,14 @@
 (async () => {
+    const baseUrl = localStorage.getItem("baseUrl");
+
     // auth validation
     const authToken = localStorage.getItem("authToken");
     if (authToken === undefined || authToken === null) {
         window.location.hash = "#login";
     }
 
-    const getUserName = async () => {
-        const userNameResponse = await fetch("http://localhost:3000/user-name", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${authToken}` }
-        });
-        if (userNameResponse.ok) {
-            const userName = (await userNameResponse.json()).userName;
-            return userName;
-        }
-    };
-
     const getUserIdFromUsername = async username => {
-        const userIdResponse = await fetch(`http://localhost:3000/user-id/${username}`, {
+        const userIdResponse = await fetch(`${baseUrl}/user-id/${username}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${authToken}` }
         });
@@ -40,7 +31,7 @@
     };
 
     const getMessages = async () => {
-        const messagesResponse = await fetch("http://localhost:3000/chat", {
+        const messagesResponse = await fetch(`${baseUrl}/chat`, {
             method: "GET",
             headers: { Authorization: `Bearer ${authToken}` }
         });
@@ -56,17 +47,17 @@
             const div = document.createElement("div");
             div.className = `d-flex flex-column ${message.type === "sent" ? "align-self-end" : ""} mb-3`;
             div.innerHTML = `
-            <div class="p-2 ${message.type === "sent" ? "bg-primary text-white" : "bg-light"} rounded" style="max-width: 75%;">
-              <p class="mb-1">${message.text}</p>
-              <small class="${message.type === "sent" ? "text-white" : "text-muted"}">${message.timestamp}</small>
-            </div>
-          `;
+                <div class="p-3 ${message.type === "sent" ? "bg-primary text-white" : "bg-light"} rounded" style="max-width: 90%; word-wrap: break-word;">
+                    <p class="mb-1">${message.text}</p>
+                    <small class="${message.type === "sent" ? "text-white" : "text-muted"}">${message.timestamp}</small>
+                </div>
+            `;
             messageFeed.appendChild(div);
         });
     };
 
     const sendMessage = async message => {
-        const sendMessageResponse = await fetch("http://localhost:3000/chat", {
+        const sendMessageResponse = await fetch(`${baseUrl}/chat`, {
             method: "POST",
             headers: { Authorization: `Bearer ${authToken}` },
             body: JSON.stringify({ message })
@@ -76,8 +67,24 @@
         }
     };
 
+    const makeEvaluation = async (token, rating) => {
+        let makeEvaluationResponse;
+        try {
+            makeEvaluationResponse = await fetch(`${baseUrl}/evaluation`, {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${authToken}` },
+                body: JSON.stringify({ token, rating })
+            });
+        } catch (e) {
+            console.error(e);
+        }
+        if (makeEvaluationResponse.ok) {
+            await manageResponse(makeEvaluationResponse, "make evaluation");
+        }
+    };
+
     try {
-        const validateResponse = await fetch("http://localhost:3000/validate", {
+        const validateResponse = await fetch(`${baseUrl}/validate`, {
             method: "POST",
             body: JSON.stringify({ token: authToken })
         });
@@ -131,8 +138,12 @@
     // contacts
     contacts.forEach(contact => {
         const li = document.createElement("li");
-        li.className = "list-group-item d-flex justify-content-between align-items-center";
-        li.innerHTML = `<span>${contact.name}</span><small class="text-muted">${contact.lastMessage}</small>`;
+        li.className = "list-group-item d-flex justify-content-between align-items-center p-3";
+        li.innerHTML = `
+        <div class="d-flex flex-column">
+            <span class="fw-bold">${contact.name}</span>
+            <small class="text-muted text-truncate" style="max-width: 100%;">${contact.lastMessage}</small>
+        </div>`;
         li.style.cursor = "pointer";
         li.addEventListener("click", () => {
             currentContactId = contact.id;
@@ -150,10 +161,12 @@
 
     const ratingForms = document.querySelectorAll(".ratingForm");
     ratingForms.forEach(rf => {
-        rf.addEventListener("submit", async () => {
+        rf.querySelector(".rate-button").addEventListener("click", async (e) => {
+            e.preventDefault();
             const token = rf.getAttribute("token").valueOf();
-            const rating = Number(rf.getElementByClass("rating").value);
-            console.log(rating);
+            const rating = Number(rf.querySelector(".rating").value);
+            await makeEvaluation(token, rating);
+            location.reload();
         });
     });
 

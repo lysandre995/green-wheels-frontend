@@ -1,4 +1,6 @@
 (async () => {
+    const baseUrl = localStorage.getItem("baseUrl");
+
     // auth validation
     const authToken = localStorage.getItem("authToken");
     if (authToken === undefined || authToken === null) {
@@ -6,7 +8,7 @@
     }
 
     try {
-        const validateResponse = await fetch("http://localhost:3000/validate", {
+        const validateResponse = await fetch(`${baseUrl}/validate`, {
             method: "POST",
             body: JSON.stringify({ token: authToken })
         });
@@ -98,7 +100,7 @@
             dateTime
         };
 
-        const response = await fetch("http://localhost:3000/ride", {
+        const response = await fetch(`${baseUrl}/ride`, {
             method: "POST",
             headers: { Authorization: `Bearer ${authToken}` },
             body: JSON.stringify({ ride })

@@ -1,4 +1,6 @@
 (async () => {
+    const baseUrl = localStorage.getItem("baseUrl");
+
     // auth validation
     const authToken = localStorage.getItem("authToken");
     if (authToken === undefined || authToken === null) {
@@ -6,7 +8,7 @@
     }
 
     try {
-        const validateResponse = await fetch("http://localhost:3000/validate", {
+        const validateResponse = await fetch(`${baseUrl}/validate`, {
             method: "POST",
             body: JSON.stringify({ token: authToken })
         });
@@ -24,7 +26,7 @@
     const deleteProfileBtn = document.getElementById("delete-profile-btn");
 
     const getProfile = async () => {
-        const response = await fetch(`http://localhost:3000/profile`, {
+        const response = await fetch(`${baseUrl}/profile`, {
             headers: { Authorization: `Bearer ${authToken}` }
         });
         if (response.ok) {
@@ -40,7 +42,7 @@
     };
 
     const createProfile = async profile => {
-        await fetch("http://localhost:3000/profile", {
+        await fetch(`${baseUrl}/profile`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${authToken}`,
@@ -53,7 +55,7 @@
     };
 
     const updateProfile = async profile => {
-        await fetch("http://localhost:3000/profile", {
+        await fetch(`${baseUrl}/profile`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${authToken}`,
@@ -66,7 +68,7 @@
     };
 
     const deleteProfile = async () => {
-        await fetch(`http://localhost:3000/profile`, {
+        await fetch(`${baseUrl}/profile`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${authToken}` }
         });

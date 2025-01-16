@@ -1,23 +1,23 @@
-<div class="d-flex h-100">
-    <div class="col-4 border-end overflow-auto" style="height: 100%">
+<div class="d-flex flex-column flex-md-row h-100">
+    <div class="col-12 col-md-4 border-end overflow-auto" style="height: 100%">
         <ul class="list-group" id="contact-list">
             <!-- Contacts -->
         </ul>
     </div>
-    <div class="col-8 d-flex flex-column" style="height: 100%">
+    <div class="col-12 col-md-8 d-flex flex-column" style="height: 100%">
         <div class="flex-grow-1 overflow-auto p-3 border-bottom" id="message-feed">
             <!-- Messages -->
         </div>
         <div class="p-3">
-            <form id="chat-form" class="d-flex">
+            <form id="chat-form" class="d-flex flex-column flex-md-row">
                 <input
                     type="text"
                     id="username-input"
-                    class="form-control me-2"
+                    class="form-control mb-2 mb-md-0 me-md-2"
                     placeholder="Recipient username..."
-                    style="width: 33%" />
-                <input type="text" id="message-input" class="form-control me-2" placeholder="Type your message..." />
-                <button type="submit" class="btn btn-primary">Send</button>
+                    style="width: 100%; max-width: 150px;" />
+                <input type="text" id="message-input" class="form-control mb-2 mb-md-0 me-md-2" placeholder="Type your message..." />
+                <button type="submit" class="btn btn-primary mt-2 mt-md-0">Send</button>
             </form>
         </div>
     </div>

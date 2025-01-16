@@ -1,6 +1,8 @@
 (async () => {
+    const baseUrl = localStorage.getItem("baseUrl");
+
     // Populate community dropdown
-    fetch("http://localhost:3000/communities")
+    fetch(`${baseUrl}/communities`)
         .then(response => response.json())
         .then(communities => {
             const communitySelect = document.getElementById("community");
@@ -52,7 +54,7 @@
         }
 
         // Submit form data if validations pass
-        fetch("http://localhost:3000/register", {
+        fetch(`${baseUrl}/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
